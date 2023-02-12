@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1676217971 source:c:\users\justy\onedrive\dokumenty\programowanie\c++\28ksiazkaadresowarepozytorium\ksiazkaadresowarepository\uzytkowicypanel\main.cpp
+	<iostream>
+	<windows.h>
+	<fstream>
+	<cstdlib>
+	<vector>
+	<string>
+	<windows.h>
+	<sstream>
+	<conio.h>
+

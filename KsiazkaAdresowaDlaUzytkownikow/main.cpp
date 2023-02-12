@@ -11,11 +11,50 @@ using namespace std;
 
 struct Uzytkownik
 {
-    int id;
+    int id = 0;
     string nazwa, haslo;
 };
+
+struct Recipient
+{
+    int id = 0;
+    int idZalogowanegoUzytkownika = 0;
+    string name = "", surname = "", phoneNumber = "", address = "", email = "";
+};
+
 vector <Uzytkownik> uzytkownicy;
+vector <Recipient> recipients;
+
+//-------------OPCJE DLA NIEZALOGOWANEGO UZYTKOWNIKA----------------------
+void startMenu(vector <Uzytkownik> & uzytkownicy);
+int rejestracja (vector <Uzytkownik> & uzytkownicy);
 void addUserToFile (Uzytkownik & newUser);
+int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy);
+int logowanie(vector <Uzytkownik> & uzytkownicy);
+
+//-------------OPCJE DLA ZALOGOWANEGO UZYTKOWNIKA----------------------
+void mainMenu (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+int readDataFromAddressBook (vector <Recipient> & recipients);
+int addNewRecipientToAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+void addRecipientToFile (Recipient & newContact);
+void searchByName (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+void searchBySurname (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+void displayFullAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+int removeRecipientFromAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+void editRecipientName (vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika);
+void editRecipientSurname (vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika);
+void editRecipientPhoneNumber (vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika);
+void editRecipientAddress (vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika);
+void editRecipientEmail (vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika);
+void displayRecipient (vector <Recipient> & recipients, int i, int idZalogowanegoUzytkownika);
+void refreshDataInFile (vector <Recipient> & recipients);
+void editMenu(vector <Recipient> & recipients, int idZalogowanegoUzytkownika);
+void zmianaHasla (vector <Uzytkownik> & uzytkownicy, int idZalogowanegoUzytkownika);
+void refreshDataInUsersFile (vector <Uzytkownik> & uzytkownicy);
+
+//-------------OPCJE DLA NIEZALOGOWANEGO UZYTKOWNIKA----------------------
+
+//PRZETESTOWANE
 
 int rejestracja (vector <Uzytkownik> & uzytkownicy)
 {
@@ -40,7 +79,9 @@ int rejestracja (vector <Uzytkownik> & uzytkownicy)
     cout << newUser.id << "|" << newUser.nazwa << "|" << newUser.haslo<< "|" << endl;
     getch();
     return usersCount;
-      }
+}
+
+//PRZETESTOWANE
 
 void addUserToFile (Uzytkownik & newUser)
 {
@@ -63,6 +104,8 @@ void refreshDataInUsersFile (vector <Uzytkownik> & uzytkownicy)
         file.close();
     }
 }
+
+//DO PRZETESTOWANIA, CZY DANE SA ZAPISANE PO ZAMKNIECIU PROGRAMU
 
 int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
 {
@@ -87,7 +130,7 @@ int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
             {
                 element.push_back(rowToRead);
             }
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 3; i++)
             {
                 switch (i)
                 {
@@ -119,7 +162,8 @@ int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
         cout << "Nie udalo sie otworzyc pliku!" << endl;
     }
     lastUserInFile = uzytkownicy.size();
-
+                                                                cout <<"Ilosc uzytkownikow = "<<lastUserInFile<<endl;
+                                                                system ("pause");
     if (usersCount == 0)
     {
         return usersCount;
@@ -137,7 +181,7 @@ int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
         return 0;
     }
 }
-
+//PRZETESTOWANE
 int logowanie(vector <Uzytkownik> & uzytkownicy)
 {
     string nazwa, haslo;
@@ -167,10 +211,12 @@ int logowanie(vector <Uzytkownik> & uzytkownicy)
         i++;
     }
     cout<<"Nie ma uzytkownika z takim loginem. "<<endl;
-    Sleep(1500);
+    getch();
     return 0;
 }
-void zmianaHasla (vector <Uzytkownik> uzytkownicy, int idZalogowanegoUzytkownika)
+//DO PRZETESTOWANIA
+
+void zmianaHasla (vector <Uzytkownik> & uzytkownicy, int idZalogowanegoUzytkownika)
 {
     int usersCount = uzytkownicy.size();
     string haslo;
@@ -188,11 +234,446 @@ void zmianaHasla (vector <Uzytkownik> uzytkownicy, int idZalogowanegoUzytkownika
     refreshDataInUsersFile (uzytkownicy);
     getch();
 }
+
+//-------------OPCJE DLA NIEZALOGOWANEGO UZYTKOWNIKA----------------------
+
+//WSZYSTKIE DO PRZETESTOWANIA
+int addNewRecipientToAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    Recipient newContact;
+    int numberOfRecipients = recipients.size();
+    cout << "Podaj imie: "<<endl;
+    cin >> newContact.name ;
+    cout << "Podaj nazwisko: " << endl;
+    cin >> newContact.surname;
+    cout << "Podaj telefon: " << endl;
+    cin.sync();
+    getline(cin, newContact.phoneNumber);
+    cout << "Podaj adres: " << endl;
+    cin.sync();
+    getline(cin, newContact.address);
+    cout << "Podaj email: " << endl;
+    cin >> newContact.email;
+    if (numberOfRecipients > 0)
+    {
+        newContact.id = recipients[numberOfRecipients - 1].id + 1;
+    }
+    else
+    {
+        newContact.id = 1;
+    }
+    newContact.idZalogowanegoUzytkownika = idZalogowanegoUzytkownika;
+    recipients.push_back( newContact );
+    numberOfRecipients = recipients.size();
+    addRecipientToFile (newContact);
+    cout << endl << "Nowa osoba zostala dodana do ksiazki adresowej. Jej dane to: " << endl;
+    cout << newContact.id << "|" << newContact.idZalogowanegoUzytkownika << "|" << newContact.name << "|" << newContact.surname << "|" << newContact.phoneNumber << "|" << newContact.address << "|" << newContact.email << "|" << endl;
+    getch();
+    return numberOfRecipients;
+}
+
+void addRecipientToFile (Recipient & newContact)
+{
+    fstream file;
+    file.open ("KsiazkaAdresowa.txt", ios::out| ios::app);
+    file << newContact.id << "|" << newContact.idZalogowanegoUzytkownika << "|" << newContact.name << "|"<<newContact.surname << "|" << newContact.phoneNumber << "|" << newContact.address << "|" << newContact.email << "|" << endl;
+    file.close();
+}
+
+void refreshDataInFile (vector <Recipient> & recipients)
+{
+    int numberOfContacts = recipients.size();
+    fstream file;
+    file.open ("KsiazkaAdresowa.txt", ios::out);
+    if( file.good() )
+    {
+        for( int i = 0; i < numberOfContacts; i++ )
+        {
+            file << recipients[i].id << "|" << recipients[i].idZalogowanegoUzytkownika << "|" << recipients[i].name << "|" << recipients[i].surname << "|" << recipients[i].phoneNumber << "|" << recipients[i].address << "|" << recipients[i].email << "|" << endl;
+        }
+        file.close();
+    }
+}
+
+int readDataFromAddressBook (vector <Recipient> & recipients)
+{
+    Recipient recipient;
+    char character = '|';
+    int numberOfRecipients = 0;
+    string row = "";
+    int rowNumber = 1;
+    int lastRecipientInFile = 0;
+    fstream file;
+    file.open ("KsiazkaAdresowa.txt", ios::in);
+    if(file.good() == true)
+    {
+        while(getline(file,row))
+        {
+            string l = row;
+            vector <string> element;
+            stringstream ss(l);
+            string rowToRead;
+
+            while (getline(ss, rowToRead, character))
+            {
+                element.push_back(rowToRead);
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                switch (i)
+                {
+                case 0:
+                    recipient.id = atoi(element[i].c_str());
+                    break;
+                case 1:
+                    recipient.idZalogowanegoUzytkownika = atoi(element[i].c_str());
+                    break;
+                 case 2:
+                    recipient.name = element[i];
+                    break;
+                case 3:
+                    recipient.surname = element[i];
+                    break;
+                case 4:
+                    recipient.phoneNumber = element[i];
+                    break;
+                case 5:
+                    recipient.address = element[i];
+                    break;
+                case 6:
+                    recipient.email = element[i];
+                    break;
+                }
+            }
+            if (rowNumber > 0)
+            {
+                numberOfRecipients++;
+                recipients.push_back(recipient);
+                rowNumber++;
+            }
+        }
+        getline(file,row);
+        file.close();
+    }
+    else
+    {
+        file.open ("KsiazkaAdresowa.txt", ios::out);
+        file.close();
+        cout << "Nie udalo sie otworzyc pliku!" << endl;
+    }
+    lastRecipientInFile = recipients.size();
+
+    if (numberOfRecipients == 0)
+    {
+        return numberOfRecipients;
+    }
+    else if (numberOfRecipients == recipients[lastRecipientInFile - 1].id)
+    {
+        return numberOfRecipients;
+    }
+    else if (numberOfRecipients != recipients[lastRecipientInFile - 1].id)
+    {
+        return recipients[lastRecipientInFile - 1].id;
+    }
+    else
+    {
+        return 0;
+    }
+}
+void displayRecipient (vector <Recipient> & recipients, int i, int idZalogowanegoUzytkownika)
+{
+    cout << recipients[i].id << "|" << recipients[i].idZalogowanegoUzytkownika << "|" << recipients[i].name << "|" << recipients[i].surname << "|" << recipients[i].phoneNumber << "|" << recipients[i].address << "|" << recipients[i].email << "|" << endl;
+}
+
+void searchByName (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    int numberOfRecipients = recipients.size();
+    string name;
+    int numberOfRecipientOccurance = 0;
+    cout << "Podaj imie, ktore chcesz wyszukac: ";
+    cin.sync();
+    cin >> name;
+    cin.sync();
+    for (int i = 0; i < numberOfRecipients; i++)
+    {
+        if(recipients[i].name == name)
+        {
+            numberOfRecipientOccurance++;
+        }
+    }
+    if (numberOfRecipientOccurance >0)
+    {
+        cout << endl << "Wyniki wyszukiwania: " << endl;
+        for (int i = 0; i < numberOfRecipients; i++)
+        {
+            if(recipients[i].name == name)
+            {
+                displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+            }
+        }
+    }
+    else
+    {
+        cout << endl << "Brak adresata o podanym imieniu w ksiazce adresowej" << endl;
+    }
+    getch();
+}
+
+void searchBySurname (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    int numberOfRecipients = recipients.size();
+    string surname;
+    int numberOfRecipientOccurance = 0;
+    cout << "Podaj nazwisko, ktore chcesz wyszukac: ";
+    cin.sync();
+    cin >> surname;
+    cin.sync();
+    for (int i = 0; i < numberOfRecipients; i++)
+    {
+        if(recipients[i].surname == surname)
+        {
+            numberOfRecipientOccurance++;
+        }
+    }
+    if (numberOfRecipientOccurance > 0)
+    {
+        cout << endl << "Wyniki wyszukiwania: " << endl;
+        for (int i = 0; i < numberOfRecipients; i++)
+        {
+            if(recipients[i].surname == surname)
+            {
+                displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+            }
+        }
+    }
+    else
+    {
+        cout << endl << "Brak adresata o podanym nazwisku w ksiazce adresowej" << endl;
+    }
+    getch();
+}
+
+void displayFullAddressBook(vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    int numberOfRecipients = recipients.size();
+    cout << "Ksiazka adresowa: " << endl<<endl;
+    for (int i = 0; i < numberOfRecipients; i++)
+    {
+        displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+    }
+    getch();
+}
+
+int removeRecipientFromAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    int id;
+    int numberOfRecipientOccurance = 0;
+    cout << "Podaj id adresata, ktorego chcesz usunac: " << endl;
+    cin >> id;
+    char letter;
+
+    for (int i = 0; i < numberOfContacts; i++)
+    {
+        if (recipients[i].id == id)
+        {
+            numberOfRecipientOccurance++;
+            cout << "Potwierdz usuniecie adresata:  " << endl << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+            cout << "ze swojej listy znajomych poprzez nacisniecie 't' " << endl;
+            cin >> letter;
+            if (letter == 't')
+            {
+                recipients.erase( recipients.begin() + i);
+                numberOfContacts = recipients.size();
+            }
+        }
+    }
+    if(numberOfRecipientOccurance<=0)
+    {
+        cout << endl << "Nie ma adresata o podanym id." << endl;
+        getch();
+    }
+    else if (numberOfContacts >= 1)
+    {
+        cout << endl << "Aktualna lista adresatow wyglada nastepujaco: " << endl;
+        for (int i = 0; i < numberOfContacts; i++)
+        {
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+        refreshDataInFile (recipients);
+        getch();
+    }
+    else
+    {
+        cout << endl << "Aktualnie lista adresatow jest pusta" << endl;
+        getch();
+    }
+    return numberOfContacts;
+}
+
+void editRecipientName(vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    for( int i = 0; i < numberOfContacts; i++ )
+    {
+        if (recipients[i].id == recipientId)
+        {
+            cout << "Zmien imie adresata:  " << endl;
+            cin >> recipients[ i ].name;
+            cout << endl << "Dane adresata po edycji: " << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+    }
+    refreshDataInFile (recipients);
+    getch();
+}
+void editRecipientSurname(vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    for( int i = 0; i < numberOfContacts; i++ )
+    {
+        if(recipients[i].id == recipientId)
+        {
+            cout << "Zmien nazwisko adresata:  " << endl;
+            cin >> recipients[ i ].surname;
+            cout << endl << "Dane adresata po edycji: " << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+    }
+    refreshDataInFile (recipients);
+    getch();
+}
+
+void editRecipientPhoneNumber(vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    for( int i = 0; i < numberOfContacts; i++ )
+    {
+        if(recipients[i].id == recipientId)
+        {
+            cout << "Zmien numer telefonu adresata:  " << endl;
+            cin.sync();
+            getline(cin, recipients[ i ].phoneNumber);
+            cout << endl << "Dane adresata po edycji: " << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+    }
+    refreshDataInFile (recipients);
+    getch();
+}
+
+void editRecipientAddress(vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    for( int i = 0; i < numberOfContacts; i++ )
+    {
+        if(recipients[i].id == recipientId)
+        {
+            cout << "Zmien adres adresata:  " << endl;
+            cin.sync();
+            getline(cin, recipients[ i ].address);
+            cout << endl << "Dane adresata po edycji: " << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+    }
+    refreshDataInFile (recipients);
+    getch();
+}
+void editRecipientEmail(vector <Recipient> & recipients, int recipientId, int idZalogowanegoUzytkownika)
+{
+    int numberOfContacts = recipients.size();
+    for( int i = 0; i < numberOfContacts; i++ )
+    {
+        if(recipients[i].id == recipientId)
+        {
+            cout << "Zmien email adresata:  " << endl;
+            cin >> recipients[ i ].email;
+            cout << endl << "Dane adresata po edycji: " << endl;
+            displayRecipient (recipients, i, idZalogowanegoUzytkownika);
+        }
+    }
+    refreshDataInFile (recipients);
+    getch();
+}
+void editMenu(vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    char editingType;
+    int recipientId;
+    int numberOfRecipientOccurance = 0;
+    int numberOfRecipients = recipients.size();
+    if (numberOfRecipients > 0)
+    {
+        cout << "Podaj id adresata: ";
+        cin >> recipientId;
+        do
+        {
+            for(int i = 0; i < numberOfRecipients; i++ )
+            {
+                if(recipientId == recipients[i].id)
+                {
+                    numberOfRecipientOccurance++;
+                    system ("cls");
+                    cout << "=====================" << endl;
+                    cout << "Wybierz dane do edycji:" << endl;
+                    cout << "=====================" << endl;
+                    cout << "1 - imie" << endl;
+                    cout << "2 - nazwisko" << endl;
+                    cout << "3 - numer telefonu" << endl;
+                    cout << "4 - adres" << endl;
+                    cout << "5 - email" << endl;
+                    cout << "6 - powrot do menu" << endl;
+                    cout << "Twoj wybor: ";
+                    cin >> editingType;
+                    system ("cls");
+                    switch (editingType)
+                    {
+                    case '1':
+                        editRecipientName(recipients, recipientId, idZalogowanegoUzytkownika);
+                        break;
+                    case '2':
+                        editRecipientSurname(recipients, recipientId, idZalogowanegoUzytkownika);
+                        break;
+                    case '3':
+                        editRecipientPhoneNumber(recipients, recipientId, idZalogowanegoUzytkownika);
+                        break;
+                    case '4':
+                        editRecipientAddress(recipients, recipientId, idZalogowanegoUzytkownika);
+                        break;
+                    case '5':
+                        editRecipientEmail(recipients, recipientId, idZalogowanegoUzytkownika);
+                        break;
+                    case '6':
+                        mainMenu (recipients, idZalogowanegoUzytkownika);
+                        break;
+                    default:
+                        cout << "Nie ma takiej opcji w menu!" << endl;
+                        getch();
+                        break;
+                    }
+                }
+            }
+            if (numberOfRecipientOccurance <= 0)
+            {
+                cout << "Nie ma adresata o podanym id.";
+                getch();
+                break;
+            }
+        }
+        while (1);
+    }
+    else
+    {
+        cout<<"Ksiazka adresowa jest pusta. Dodaj adresatow, by moc ich edytowac" << endl;
+        getch();
+    }
+}
 void startMenu(vector <Uzytkownik> & uzytkownicy)
 {
-int idZalogowanegoUzytkownika = 0;
-int usersCount = uzytkownicy.size();
- char wybor;
+    int idZalogowanegoUzytkownika;
+    int usersCount = uzytkownicy.size();
+    char wybor;
+    vector <Recipient> recipients;
     while (1)
     {
         if (idZalogowanegoUzytkownika==0)
@@ -204,7 +685,7 @@ int usersCount = uzytkownicy.size();
             cin>>wybor;
             if (wybor == '1')
             {
-               usersCount = rejestracja (uzytkownicy);
+                usersCount = rejestracja (uzytkownicy);
             }
             else if (wybor == '2')
             {
@@ -217,18 +698,90 @@ int usersCount = uzytkownicy.size();
         }
         else
         {
-            system ("cls");
-            cout<<"1. Zmiana hasla"<<endl;
-            cout<<"2. Wylogowanie"<<endl;
-            cin>>wybor;
-            if (wybor == '1')
+            mainMenu (recipients, idZalogowanegoUzytkownika);
+        }
+    }
+}
+void mainMenu (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
+{
+    Recipient recipient;
+    int numberOfRecipients = 0;
+   numberOfRecipients = readDataFromAddressBook(recipients);
+   //int numberOfRecipients = recipients.size();
+    char menuSelection;
+    while (1)
+    {
+        system ("cls");
+        cout << "=================" << endl;
+        cout << "KSIAZKA ADRESOWA" << endl;
+        cout << "=================" << endl;
+        cout << "1. Dodaj adresata" << endl;
+        cout << "2. Wyszukaj po imieniu" << endl;
+        cout << "3. Wyszukaj po nazwisku" << endl;
+        cout << "4. Wyswietl wszystkich adresatow" << endl;
+        cout << "5. Usun adresata" << endl;
+        cout << "6. Edytuj adresata" << endl;
+        cout << "7. Zmien haslo" << endl;
+        cout << "9. Wyloguj sie" << endl;
+        cout << "Twoj wybor: ";
+        cin >> menuSelection;
+        system ("cls");
+        switch (menuSelection)
+        {
+       case '1':
+            numberOfRecipients =  addNewRecipientToAddressBook (recipients, idZalogowanegoUzytkownika);
+            break;
+        case '2':
+            if (numberOfRecipients>0)
+               searchByName (recipients, idZalogowanegoUzytkownika);
+            else
             {
-                zmianaHasla (uzytkownicy, idZalogowanegoUzytkownika);
+                cout << "Ksiazka adresowa jest pusta. Dodaj adresatow, by moc ich wyszukiwac" << endl;
+                getch();
             }
-            else if (wybor == '2')
+            break;
+        case '3':
+            if (numberOfRecipients>0)
+              searchBySurname(recipients, idZalogowanegoUzytkownika);
+            else
             {
-               idZalogowanegoUzytkownika = 0;
+                cout << "Ksiazka adresowa jest pusta. Dodaj adresatow, by moc ich wyszukiwac" << endl;
+                getch();
             }
+            break;
+        case '4':
+            if (numberOfRecipients>0)
+                displayFullAddressBook(recipients, idZalogowanegoUzytkownika);
+            else
+            {
+                cout << "Ksiazka adresowa jest pusta. Dodaj adresatow, by moc ich wyswietlac" << endl;
+                getch();
+            }
+            break;
+        case '5':
+            if (numberOfRecipients > 0)
+                numberOfRecipients = removeRecipientFromAddressBook(recipients, idZalogowanegoUzytkownika);
+            else
+            {
+                cout << "Ksiazka adresowa jest pusta. Dodaj adresatow" << endl;
+                getch();
+            }
+            break;
+        case '6':
+            editMenu(recipients, idZalogowanegoUzytkownika);
+            break;
+        case '7':
+            zmianaHasla (uzytkownicy, idZalogowanegoUzytkownika);
+            break;
+        case '9':
+            system ( "cls" );
+              idZalogowanegoUzytkownika = 0;
+            cout << "Zostales wylogowany"<< endl;
+            exit(0);
+        default:
+            cout << "Nie ma takiej opcji w menu!"<< endl;
+            getch();
+            break;
         }
     }
 }
@@ -236,14 +789,9 @@ int usersCount = uzytkownicy.size();
 int main()
 {
     vector <Uzytkownik> uzytkownicy;
+    vector <Recipient> recipients;
     Uzytkownik uzytkownik;
-
-    int idZalogowanegoUzytkownika = 0;//identyfikator zalogowanego uzytkownika.
-//Jesli rowna zero, to znaczy, ¿ ¿aden u¿ytkownik nie jest zalogowany
-//i program ma wyswietlac manu zwiazane z rejestrowaniem uzytkownika oraz logowaniem.
-//W przeciwnym razie gdy wartosc wieksza od zera, bedzie wiadomo, ze jakis uzytkownik
-//juz jest zalogowany i wtedy program ma mi wyswietlac manu zwiazane ze zmiana hasla
-//oraz wylogowywaniem sie.
+    int idZalogowanegoUzytkownika = 0;
     int usersCount = 0;
     usersCount = readDataFromUsersBook (uzytkownicy);
     startMenu(uzytkownicy);
