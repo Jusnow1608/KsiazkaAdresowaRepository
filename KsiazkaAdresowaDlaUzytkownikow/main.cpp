@@ -54,7 +54,7 @@ void refreshDataInUsersFile (vector <Uzytkownik> & uzytkownicy);
 
 //-------------OPCJE DLA NIEZALOGOWANEGO UZYTKOWNIKA----------------------
 
-//PRZETESTOWANE
+//----------------------------REJESTRACJA---------------------------------
 
 int rejestracja (vector <Uzytkownik> & uzytkownicy)
 {
@@ -81,7 +81,7 @@ int rejestracja (vector <Uzytkownik> & uzytkownicy)
     return usersCount;
 }
 
-//PRZETESTOWANE
+//-------------------------DODANIE U¯YTKOWNIKA DO PLIKU------------------------------
 
 void addUserToFile (Uzytkownik & newUser)
 {
@@ -105,7 +105,7 @@ void refreshDataInUsersFile (vector <Uzytkownik> & uzytkownicy)
     }
 }
 
-//DO PRZETESTOWANIA, CZY DANE SA ZAPISANE PO ZAMKNIECIU PROGRAMU
+//-------------------------ODCZYTANIE DANYCH U¯YTKOWNIKÓW Z PLIKU------------------------------
 
 int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
 {
@@ -162,8 +162,7 @@ int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
         cout << "Nie udalo sie otworzyc pliku!" << endl;
     }
     lastUserInFile = uzytkownicy.size();
-                                                                cout <<"Ilosc uzytkownikow = "<<lastUserInFile<<endl;
-                                                                system ("pause");
+
     if (usersCount == 0)
     {
         return usersCount;
@@ -181,7 +180,9 @@ int readDataFromUsersBook (vector <Uzytkownik> & uzytkownicy)
         return 0;
     }
 }
-//PRZETESTOWANE
+
+//----------------------------LOGOWANIE---------------------------------
+
 int logowanie(vector <Uzytkownik> & uzytkownicy)
 {
     string nazwa, haslo;
@@ -237,7 +238,8 @@ void zmianaHasla (vector <Uzytkownik> & uzytkownicy, int idZalogowanegoUzytkowni
 
 //-------------OPCJE DLA NIEZALOGOWANEGO UZYTKOWNIKA----------------------
 
-//WSZYSTKIE DO PRZETESTOWANIA
+//----------DODANIE NOWEGO ADRESATA DDO KSIAZKI ADRESOWEJ-----------------
+
 int addNewRecipientToAddressBook (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
 {
     Recipient newContact;
@@ -272,6 +274,8 @@ int addNewRecipientToAddressBook (vector <Recipient> & recipients, int idZalogow
     return numberOfRecipients;
 }
 
+//----------------------------DODANIE ADRESATA DO PLIKU---------------------------------
+
 void addRecipientToFile (Recipient & newContact)
 {
     fstream file;
@@ -294,6 +298,7 @@ void refreshDataInFile (vector <Recipient> & recipients)
         file.close();
     }
 }
+//----------------------------ODCZYTANIE DANYCH ADRESATÓW Z PLIKU---------------------------------
 
 int readDataFromAddressBook (vector <Recipient> & recipients)
 {
@@ -380,10 +385,15 @@ int readDataFromAddressBook (vector <Recipient> & recipients)
         return 0;
     }
 }
+
+//----------------------------WYŒWIETLENIE DANYCH ADRESATÓW---------------------------------
+
 void displayRecipient (vector <Recipient> & recipients, int i, int idZalogowanegoUzytkownika)
 {
     cout << recipients[i].id << "|" << recipients[i].idZalogowanegoUzytkownika << "|" << recipients[i].name << "|" << recipients[i].surname << "|" << recipients[i].phoneNumber << "|" << recipients[i].address << "|" << recipients[i].email << "|" << endl;
 }
+
+//----------------------------WYSZUKANIE ADRESATÓW PO IMIENIU---------------------------------
 
 void searchByName (vector <Recipient> & recipients, int idZalogowanegoUzytkownika)
 {
@@ -396,7 +406,7 @@ void searchByName (vector <Recipient> & recipients, int idZalogowanegoUzytkownik
     cin.sync();
     for (int i = 0; i < numberOfRecipients; i++)
     {
-        if(recipients[i].name == name)
+        if((recipients[i].name == name) & (recipients[i].idZalogowanegoUzytkownika==idZalogowanegoUzytkownika))
         {
             numberOfRecipientOccurance++;
         }
@@ -406,7 +416,7 @@ void searchByName (vector <Recipient> & recipients, int idZalogowanegoUzytkownik
         cout << endl << "Wyniki wyszukiwania: " << endl;
         for (int i = 0; i < numberOfRecipients; i++)
         {
-            if(recipients[i].name == name)
+            if((recipients[i].name == name) & (recipients[i].idZalogowanegoUzytkownika==idZalogowanegoUzytkownika))
             {
                 displayRecipient (recipients, i, idZalogowanegoUzytkownika);
             }
@@ -430,7 +440,7 @@ void searchBySurname (vector <Recipient> & recipients, int idZalogowanegoUzytkow
     cin.sync();
     for (int i = 0; i < numberOfRecipients; i++)
     {
-        if(recipients[i].surname == surname)
+        if((recipients[i].surname == surname) & (recipients[i].idZalogowanegoUzytkownika==idZalogowanegoUzytkownika))
         {
             numberOfRecipientOccurance++;
         }
@@ -440,7 +450,7 @@ void searchBySurname (vector <Recipient> & recipients, int idZalogowanegoUzytkow
         cout << endl << "Wyniki wyszukiwania: " << endl;
         for (int i = 0; i < numberOfRecipients; i++)
         {
-            if(recipients[i].surname == surname)
+            if((recipients[i].surname == surname) & (recipients[i].idZalogowanegoUzytkownika==idZalogowanegoUzytkownika))
             {
                 displayRecipient (recipients, i, idZalogowanegoUzytkownika);
             }
