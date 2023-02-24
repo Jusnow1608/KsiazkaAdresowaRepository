@@ -1,1 +1,6 @@
-1|2|Justyna|Nowak|518740960|ul. Mulinowicza 19/25 Lodz 93-334|justyna.nowak50@wp.pl|
+1|2|Justyna|Nowak|518740960|ul. Mulinowicza 19, mieszkania 25 ù¢d´ 93-334|justyna.nowak50@wp.pl|
+2|1|Magda|Nowak|123456789|Radziechowice Drugie, ul .Kr¢lewska 43, 97-561 ùadzice|magdalena.nowak0930@gmail.com|
+4|1|Justynka|Drogosz-Kowalska|500500501|ù¢d´|justynka.drogosz@wp.pl|
+5|3|Danuta|Nowak|507507507|Radziechowice Drugie, ul. Kr¢lewska 43, 97-561 ùadzice|xyz@wp.pl|
+6|1|Andrzej|Nowak|456789900|Radziechowice Drugie, ul. Kr¢lewska 43 97-561 ùadzice|abc@wp.pl|
+7|2|Ewa|Kaniecka|567567567|Konstantyn¢w ù¢dzki|e.kaniecka@tme.pl|
